@@ -16,7 +16,7 @@ setup(
     long_description=README,
     author='brianr',
     author_email='brian@ratchet.io',
-    url='',
+    url='http://github.com/brianr/django_ratchet',
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",

@@ -16,7 +16,22 @@ django_ratchet requires:
 
 Installation
 ------------
-abcdefg
+Get the django_ratchet code by cloning the git repo (or [download the zip](https://github.com/brianr/django_ratchet/zipball/master) and unzip it somewhere):
+    
+    git clone https://github.com/brianr/django_ratchet.git
+
+Once you download it, install like this:
+
+    cd django_ratchet
+    python setup.py install
+
+If you'd like to be able to update at any time by pulling down the latest change from git without running `python setup.py install` again, you can symlink the inner module into your `site-packages`:
+
+    ln -s /absolute/path/to/django_ratchet/django_ratchet /absolute/path/to/site-packages
+
+To make sure it works, run:
+
+    python -c 'import django_ratchet; print "It works!"'
 
 
 Configuration
