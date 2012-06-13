@@ -1,5 +1,14 @@
 """
-The django-ratchet middleware
+django-ratchet middleware
+
+To install, add the following in your settings.py:
+1. add 'django_ratchet.middleware.RatchetNotifierMiddleware' to MIDDLEWARE_CLASSES 
+2. add a section like this:
+RATCHET = {
+    'access_token': 'tokengoeshere',
+}
+
+See README.md for full installation and configuration instructions.
 """
 
 import json
@@ -19,10 +28,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 DEFAULTS = {
-    #'endpoint': 'http://submit.ratchet.io/api/item/',
-    'endpoint': 'http://localhost:6943/api/item/',
+    'endpoint': 'http://submit.ratchet.io/api/item/',
+    'enabled': True,
+    'handler': 'blocking',
     'timeout': 1,
-    'notify_while_debug': False,
     'environment': lambda: 'development' if settings.DEBUG else 'production',
 }
 
@@ -36,20 +45,29 @@ def _extract_user_ip(request):
     if forwarded_for:
         return forwarded_for
     return request.environ['REMOTE_ADDR']
- 
+
 
 class RatchetNotifierMiddleware(object):
     def __init__(self):
         self.settings = getattr(settings, 'RATCHET', {})
         if not self.settings.get('access_token'):
             raise MiddlewareNotUsed
-        
-        if settings.DEBUG and not self._get_setting('notify_while_debug'):
+
+        if not self._get_setting('enabled'):
             raise MiddlewareNotUsed
         
+        # basic settings
         self.endpoint = self._get_setting('endpoint')
         self.timeout = self._get_setting('timeout')
+        self.handler_name = self._get_setting('handler')
+        try:
+            self.handler = getattr(self, '_handler_%s' % self.handler_name)
+        except AttributeError:
+            self.handler_name = DEFAULTS['handler']
+            print "Unknown handler name, defaulting to %s" % self.handler_name
+            self.handler = getattr(self, '_handler_%s' % self.handler_name)
 
+        # cache settings/environment variables that won't change across requests
         self.server_host = socket.gethostname()
         self.server_environment = self._get_setting('environment')
         self.server_branch = self._get_setting('branch')
@@ -115,4 +133,17 @@ class RatchetNotifierMiddleware(object):
         
         payload['params'] = json.dumps(params)
 
-        requests.post(self.endpoint, data=payload, timeout=self.timeout)
+        self.handler(payload)
+
+    def _handler_blocking(self, payload):
+        """
+        Send the payload immediately, and block until the request completes.
+        If self.timeout is nonzero, use it as the timeout (in seconds).
+        """
+        kw = {'data': payload}
+        if self.timeout:
+            kw['timeout'] = self.timeout
+
+        requests.post(self.endpoint, **kw)
+        
+
