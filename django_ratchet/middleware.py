@@ -24,7 +24,6 @@ from django.core.exceptions import MiddlewareNotUsed
 from django.conf import settings
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 DEFAULTS = {
