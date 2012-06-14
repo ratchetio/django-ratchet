@@ -55,7 +55,7 @@ Basic configuration requires two changes in your `settings.py`.
     
         RATCHET = {
             'access_token': '32charactertokengoeshere',
-            'github.user': 'brianr',
+            'github.account': 'brianr',
             'github.repo': 'django_ratchet',
             'branch': 'master',
             'root': '/absolute/path/to/code/root',
@@ -84,8 +84,8 @@ Here's the full list of configuration variables:
     </dd>
   <dt>root</dt>
     <dd>Absolute path to the root of your application, not including the final <code>/</code>. If your manage.py is in <code>/home/brian/www/coolapp/manage.py</code>, then this should be set to <code>/home/brian/www/coolapp</code> . Required for Github integration.</dd>
-  <dt>github.user</dt>
-    <dd>Github username for your github repo. Required for Github integration.</dd>
+  <dt>github.account</dt>
+    <dd>Github account name for your github repo. Required for Github integration.</dd>
   <dt>github.repo</dt>
     <dd>Github repo name. Required for Github integration.</dd>
   <dt>branch</dt>
