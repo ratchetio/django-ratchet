@@ -71,7 +71,12 @@ Here's the full list of configuration variables:
         <b>default:</b> <code>http://submit.ratchet.io/api/item/</code>
     </dd>
   <dt>handler</dt>
-    <dd>Either <code>blocking</code> (runs in main thread) or <code>thread</code> (spawns a new thread).<br>
+    <dd>One of:
+        <ul>
+            <li><code>blocking</code> -- runs in main thread</li>
+            <li><code>thread</code> -- spawns a new thread</li>
+            <li><code>ratchetd</code> -- writes messages to a log file for consumption by <a href="http://github.com/brianr/ratchetd">ratchetd</a></li>
+        </ul>
         <b>default:</b> <code>thread</code>
     </dd>
   <dt>timeout</dt>
@@ -90,5 +95,7 @@ Here's the full list of configuration variables:
     <dd>Github repo name. Required for Github integration.</dd>
   <dt>branch</dt>
     <dd>Name of the checked-out branch. Required for Github integration.</dd>
+  <dt>ratchetd.log_file</dt>
+    <dd>If <code>handler</code> is <code>ratchetd</code>, the path to the log file. Filename must end in <code>.ratchet</code></dd>
 </dl>
 
