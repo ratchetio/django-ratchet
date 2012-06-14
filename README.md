@@ -71,8 +71,8 @@ Here's the full list of configuration variables:
         <b>default:</b> <code>http://submit.ratchet.io/api/item/</code>
     </dd>
   <dt>handler</dt>
-    <dd>Currently only one choice, <code>blocking</code>.<br>
-        <b>default:</b> <code>blocking</code>
+    <dd>Either <code>blocking</code> (runs in main thread) or <code>thread</code> (spawns a new thread).<br>
+        <b>default:</b> <code>thread</code>
     </dd>
   <dt>timeout</dt>
     <dd>Request timeout (in seconds) when posting to Ratchet.<br>
@@ -92,7 +92,3 @@ Here's the full list of configuration variables:
     <dd>Name of the checked-out branch. Required for Github integration.</dd>
 </dl>
 
-
-Caveats
--------
-There is currently only one handler, 'blocking', which makes and blocks on an HTTP POST to report each error. More handlers are coming soon (or fork and write your own).

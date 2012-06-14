@@ -15,6 +15,7 @@ import json
 import logging
 import socket
 import sys
+import threading
 import time
 import traceback
 
@@ -29,7 +30,7 @@ log = logging.getLogger(__name__)
 DEFAULTS = {
     'endpoint': 'http://submit.ratchet.io/api/item/',
     'enabled': True,
-    'handler': 'blocking',
+    'handler': 'thread',
     'timeout': 1,
     'environment': lambda: 'development' if settings.DEBUG else 'production',
 }
@@ -97,7 +98,7 @@ class RatchetNotifierMiddleware(object):
         """
         try:
             self._process_exception(request, exc)
-        except:
+        except Exception, e:
             log.exception("Error while reporting exception to ratchet.")
         return None
 
@@ -144,5 +145,11 @@ class RatchetNotifierMiddleware(object):
             kw['timeout'] = self.timeout
 
         requests.post(self.endpoint, **kw)
-        
+
+    def _handler_thread(self, payload):
+        """
+        Spawn a new single-use thread to send the payload immediately.
+        """
+        thread = threading.Thread(target=self._handler_blocking, args=(payload,))
+        thread.start()
 
