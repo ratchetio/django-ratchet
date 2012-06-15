@@ -62,7 +62,7 @@ handler
 
     - blocking -- runs in main thread
     - thread -- spawns a new thread
-    - ratchetd -- writes messages to a log file for consumption by ratchetd_
+    - agent -- writes messages to a log file for consumption by ratchet-agent_
 
     **default:** ``thread``
 timeout
@@ -81,9 +81,9 @@ github.repo
     Github repo name. Required for Github integration.
 branch
     Name of the checked-out branch. Required for Github integration.
-ratchetd.log_file
-    If ``handler`` is ``ratchetd``, the path to the log file. Filename must end in ``.ratchet``
+agent.log_file
+    If ``handler`` is ``agent``, the path to the log file. Filename must end in ``.ratchet``
 
 .. _Ratchet.io: http://ratchet.io/
 .. _`download the zip`: https://github.com/brianr/django_ratchet/zipball/master
-.. _ratchetd: http://github.com/brianr/ratchetd
+.. _ratchet-agent: http://github.com/brianr/ratchet-agent

@@ -33,7 +33,7 @@ DEFAULTS = {
     'handler': 'thread',
     'timeout': 1,
     'environment': lambda: 'development' if settings.DEBUG else 'production',
-    'ratchetd.log_file': 'log.ratchet',
+    'agent.log_file': 'log.ratchet',
 }
 
 
@@ -76,18 +76,18 @@ class RatchetNotifierMiddleware(object):
         self.server_github_account = self._get_setting('github.account')
         self.server_github_repo = self._get_setting('github.repo')
 
-        # special case for 'ratchetd' handler
-        if self.handler_name == 'ratchetd':
-            self.ratchetd_log = self._create_ratchetd_log()
+        # special case for 'agent' handler
+        if self.handler_name == 'agent':
+            self.agent_log = self._create_agent_log()
 
-    def _create_ratchetd_log(self):
-        log_file = self._get_setting('ratchetd.log_file')
+    def _create_agent_log(self):
+        log_file = self._get_setting('agent.log_file')
         if not log_file.endswith('.ratchet'):
-            log.error("Provided ratchetd log file does not end with .ratchet, which it must. "
+            log.error("Provided agent log file does not end with .ratchet, which it must. "
                 "Using default instead.")
-            log_file = DEFAULTS['ratchetd.log_file']
+            log_file = DEFAULTS['agent.log_file']
         
-        retval = logging.getLogger('ratchetd')
+        retval = logging.getLogger('ratchet_agent')
         handler = logging.FileHandler(log_file, 'a', 'utf-8')
         formatter = logging.Formatter('%(message)s')
         handler.setFormatter(formatter)
@@ -173,9 +173,9 @@ class RatchetNotifierMiddleware(object):
         thread = threading.Thread(target=self._handler_blocking, args=(payload,))
         thread.start()
 
-    def _handler_ratchetd(self, payload):
+    def _handler_agent(self, payload):
         """
-        Write a the payload to the ratchetd log file; ratchetd will post it to the server.
+        Write a the payload to the ratchet-agent log file; ratchet-agent will post it to the server.
         """
-        self.ratchetd_log.error(json.dumps(payload))
+        self.agent_log.error(json.dumps(payload))
 
