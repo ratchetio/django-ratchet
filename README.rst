@@ -70,7 +70,7 @@ timeout
     
     **default:** ``1``
 environment
-    Environment name; should be ``production``, ``staging``, or ``development``.
+    Environment name. Any string up to 255 chars is OK. For best results, use "production" for your production environment.
     
     **default:** ``development`` if ``settings.DEBUG`` is ``True``, ``production`` otherwise
 root
