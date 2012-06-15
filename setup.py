@@ -11,24 +11,32 @@ except IOError:
 
 setup(
     name='django_ratchet',
+    packages=['django_ratchet'],
     version='0.1',
-    description='ratchet plugin for django',
+    description='Ratchet.io plugin for django',
     long_description=README,
-    author='brianr',
+    author='Brian Rue',
     author_email='brian@ratchet.io',
     url='http://github.com/brianr/django_ratchet',
     classifiers=[
-        "Development Status :: 1 - Planning",
-        "Intended Audience :: Developers",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Development Status :: 3 - Alpha",
+        "Environment :: Web Environment",
+        "Framework :: Django",
+        "Intended Audience :: Developers",
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Bug Tracking",
+        "Topic :: Software Development :: Testing",
+        "Topic :: Software Development :: Quality Assurance",
         ],
     install_requires=[
         'django>=1.4',
         'requests',
         ],
-    packages=find_packages(),
-    zip_safe=False,
     )
 
 

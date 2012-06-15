@@ -1,2 +1,4 @@
 *.pyc
 *.swp
+dist/
+django_ratchet.egg-info/
