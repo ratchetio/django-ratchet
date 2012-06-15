@@ -3,7 +3,7 @@ from setuptools import Command, find_packages, setup
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-README_PATH = os.path.join(HERE, 'README.md')
+README_PATH = os.path.join(HERE, 'README.rst')
 try:
     README = open(README_PATH).read()
 except IOError:
@@ -12,7 +12,7 @@ except IOError:
 setup(
     name='django_ratchet',
     packages=['django_ratchet'],
-    version='0.1',
+    version='0.1.2',
     description='Ratchet.io plugin for django',
     long_description=README,
     author='Brian Rue',
