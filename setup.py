@@ -12,7 +12,7 @@ except IOError:
 setup(
     name='django_ratchet',
     packages=['django_ratchet'],
-    version='0.1.5',
+    version='0.2',
     description='Ratchet.io plugin for django',
     long_description=README,
     author='Brian Rue',
@@ -22,7 +22,7 @@ setup(
         "Programming Language :: Python",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",
         "Intended Audience :: Developers",

@@ -43,8 +43,7 @@ Basic configuration requires two changes in your ``settings.py``.
 
     RATCHET = {
         'access_token': '32charactertokengoeshere',
-        'github.account': 'brianr',
-        'github.repo': 'django_ratchet',
+        'environment': 'production',
         'branch': 'master',
         'root': '/absolute/path/to/code/root',
     }
@@ -53,10 +52,10 @@ Here's the full list of configuration variables:
 
 access_token
     Access token from your Ratchet.io project
-endpoint
-    URL items are posted to.
+environment
+    Environment name. Any string up to 255 chars is OK. For best results, use "production" for your production environment.
     
-    **default:** ``http://submit.ratchet.io/api/item/``
+    **default:** ``development`` if ``settings.DEBUG`` is ``True``, ``production`` otherwise
 handler
     One of:
 
@@ -69,20 +68,16 @@ timeout
     Request timeout (in seconds) when posting to Ratchet.
     
     **default:** ``1``
-environment
-    Environment name. Any string up to 255 chars is OK. For best results, use "production" for your production environment.
-    
-    **default:** ``development`` if ``settings.DEBUG`` is ``True``, ``production`` otherwise
 root
     Absolute path to the root of your application, not including the final ``/``. If your ``manage.py`` is in ``/home/brian/www/coolapp/manage.py``, then this should be set to ``/home/brian/www/coolapp`` . Required for Github integration.
-github.account
-    Github account name for your github repo. Required for Github integration.
-github.repo
-    Github repo name. Required for Github integration.
 branch
     Name of the checked-out branch. Required for Github integration.
 agent.log_file
     If ``handler`` is ``agent``, the path to the log file. Filename must end in ``.ratchet``
+endpoint
+    URL items are posted to.
+    
+    **default:** ``https://submit.ratchet.io/api/1/item/``
 
 Contributing
 ------------
@@ -96,5 +91,4 @@ If you have any questions, feedback, etc., drop me a line at brian@ratchet.io
 
 
 .. _Ratchet.io: http://ratchet.io/
-.. _`download the zip`: https://github.com/brianr/django_ratchet/zipball/master
 .. _ratchet-agent: http://github.com/brianr/ratchet-agent
