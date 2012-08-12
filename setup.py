@@ -10,9 +10,9 @@ except IOError:
     README = ''
 
 setup(
-    name='django_ratchet',
+    name='django-ratchet',
     packages=['django_ratchet'],
-    version='0.2',
+    version='0.2.1',
     description='Ratchet.io plugin for django',
     long_description=README,
     author='Brian Rue',

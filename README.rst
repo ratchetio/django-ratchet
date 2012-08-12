@@ -1,12 +1,12 @@
-django_ratchet - Django notifier for Ratchet.io_
+django-ratchet - Django notifier for Ratchet.io_
 ================================================
 
-django_ratchet is a simple middleware for reporting errors from Django apps to Ratchet.io_.
+django-ratchet is a simple middleware for reporting errors from Django apps to Ratchet.io_.
 
 
 Requirements
 ------------
-django_ratchet requires:
+django-ratchet requires:
 
 - Python 2.6 or 2.7
 - Django 1.4+
@@ -18,7 +18,7 @@ Installation
 ------------
 Install using pip::
     
-    pip install django_ratchet
+    pip install django-ratchet
 
 
 Configuration
@@ -82,7 +82,7 @@ endpoint
 Contributing
 ------------
 
-Contributions are welcome. The project is hosted on github at http://github.com/brianr/django_ratchet
+Contributions are welcome. The project is hosted on github at http://github.com/ratchetio/django-ratchet
 
 
 Additional Help
@@ -91,4 +91,4 @@ If you have any questions, feedback, etc., drop me a line at brian@ratchet.io
 
 
 .. _Ratchet.io: http://ratchet.io/
-.. _ratchet-agent: http://github.com/brianr/ratchet-agent
+.. _ratchet-agent: http://github.com/ratchetio/ratchet-agent
