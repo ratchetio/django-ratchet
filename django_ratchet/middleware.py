@@ -26,7 +26,7 @@ from django.conf import settings
 
 log = logging.getLogger(__name__)
 
-VERSION = '0.2.1'
+VERSION = '0.2.2'
 
 
 DEFAULTS = {
@@ -41,12 +41,12 @@ DEFAULTS = {
 
 def _extract_user_ip(request):
     # some common things passed by load balancers... will need more of these.
-    real_ip = request.environ.get('HTTP_X_REAL_IP')
-    if real_ip:
-        return real_ip
     forwarded_for = request.environ.get('HTTP_X_FORWARDED_FOR')
     if forwarded_for:
         return forwarded_for
+    real_ip = request.environ.get('HTTP_X_REAL_IP')
+    if real_ip:
+        return real_ip
     return request.environ['REMOTE_ADDR']
 
 
