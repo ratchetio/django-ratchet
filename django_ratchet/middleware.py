@@ -18,6 +18,7 @@ import sys
 import threading
 import time
 import traceback
+import uuid
 
 import requests
 
@@ -26,16 +27,18 @@ from django.conf import settings
 
 log = logging.getLogger(__name__)
 
-VERSION = '0.2.2'
+VERSION = '0.3'
 
 
 DEFAULTS = {
     'endpoint': 'https://submit.ratchet.io/api/1/item/',
+    'web_base': 'https://ratchet.io',
     'enabled': True,
     'handler': 'thread',
     'timeout': 1,
     'environment': lambda: 'development' if settings.DEBUG else 'production',
     'agent.log_file': 'log.ratchet',
+    'patch_debugview': True
 }
 
 
@@ -48,6 +51,41 @@ def _extract_user_ip(request):
     if real_ip:
         return real_ip
     return request.environ['REMOTE_ADDR']
+
+
+def _patch_debugview(ratchet_web_base):
+    try:
+        from django.views import debug
+    except ImportError:
+        return
+    
+    if ratchet_web_base.endswith('/'):
+        ratchet_web_base = ratchet_web_base[:-1]
+    
+    # modify the TECHNICAL_500_TEMPLATE
+    new_data = """
+{% if view_in_ratchet_url %}
+  <h3 style="margin-bottom:15px;"><a href="{{ view_in_ratchet_url }}">View in Ratchet.io</a></h3>
+{% endif %}
+    """
+    insert_before = '<table class="meta">'
+    replacement = new_data + insert_before
+    debug.TECHNICAL_500_TEMPLATE = debug.TECHNICAL_500_TEMPLATE.replace(insert_before, 
+        replacement, 1)
+
+    # patch ExceptionReporter.get_traceback_data
+    old_get_traceback_data = debug.ExceptionReporter.get_traceback_data
+    def new_get_traceback_data(exception_reporter):
+        data = old_get_traceback_data(exception_reporter)
+        try:
+            item_uuid = exception_reporter.request.META.get('ratchet.uuid')
+            if item_uuid:
+                url = '%s/item/uuid/?uuid=%s' % (ratchet_web_base, item_uuid)
+                data['view_in_ratchet_url'] = url
+        except:
+            log.exception("Exception while adding view-in-ratchet link to technical_500_template.")
+        return data
+    debug.ExceptionReporter.get_traceback_data = new_get_traceback_data
 
 
 class RatchetNotifierMiddleware(object):
@@ -82,6 +120,9 @@ class RatchetNotifierMiddleware(object):
         if self.handler_name == 'agent':
             self.agent_log = self._create_agent_log()
 
+        # monkeypatch debug module
+        if self._get_setting('patch_debugview'):
+            _patch_debugview(self._get_setting('web_base'))
 
     def _ensure_log_handler(self):
         """
@@ -154,6 +195,11 @@ class RatchetNotifierMiddleware(object):
                 'version': VERSION,
             }
         }
+
+        # uuid
+        data['uuid'] = str(uuid.uuid4())
+        # save in request.META for later
+        request.META['ratchet.uuid'] = data['uuid']
 
         # exception info
         cls, exc, trace = sys.exc_info()
