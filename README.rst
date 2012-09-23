@@ -78,6 +78,15 @@ endpoint
     URL items are posted to.
     
     **default:** ``https://submit.ratchet.io/api/1/item/``
+web_base
+    Base URL of the Ratchet.io web interface. Used for "view in ratchet.io" links.
+
+    **default:** ``https://ratchet.io``
+patch_debugview
+    If True, django.views.debug will be patched to show a "View in Ratchet.io" link on technical 500 debug error pages.
+
+    **default:** ``True``
+
 
 Contributing
 ------------

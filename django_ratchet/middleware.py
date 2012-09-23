@@ -27,7 +27,7 @@ from django.conf import settings
 
 log = logging.getLogger(__name__)
 
-VERSION = '0.3'
+VERSION = '0.3.1'
 
 
 DEFAULTS = {
@@ -65,7 +65,7 @@ def _patch_debugview(ratchet_web_base):
     # modify the TECHNICAL_500_TEMPLATE
     new_data = """
 {% if view_in_ratchet_url %}
-  <h3 style="margin-bottom:15px;"><a href="{{ view_in_ratchet_url }}">View in Ratchet.io</a></h3>
+  <h3 style="margin-bottom:15px;"><a href="{{ view_in_ratchet_url }}" target="_blank">View in Ratchet.io</a></h3>
 {% endif %}
     """
     insert_before = '<table class="meta">'
@@ -233,6 +233,9 @@ class RatchetNotifierMiddleware(object):
                 headers[header_name] = v
         data['request']['headers'] = headers
 
+        # current user
+        self._extract_person_data(request, data)
+
         # server environment
         data['server'] = {
             'host': self.server_host,
@@ -248,6 +251,29 @@ class RatchetNotifierMiddleware(object):
             'data': data
         }
         return json.dumps(payload)
+    
+    def _extract_person_data(self, request, data):
+        """
+        Try to build the Person data, using request.user
+        Assumes a standard-ish use of django.contrib.auth
+        """
+        def wrapped():
+            if not request.user.is_authenticated():
+                return
+            person = {}
+            for prop in ['id', 'username', 'email']:
+                try:
+                    person[prop] = getattr(request.user, prop, None)
+                except:
+                    pass
+            # save to data, if we have anything at all
+            if person:
+                data['person'] = person
+
+        try:
+            wrapped()
+        except:
+            log.exception("Exception in _extract_person_data()")
 
     def _handler_blocking(self, payload):
         """
