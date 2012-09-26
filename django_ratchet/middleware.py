@@ -97,6 +97,7 @@ class RatchetNotifierMiddleware(object):
         if not self._get_setting('enabled'):
             raise MiddlewareNotUsed
         
+        self.encoder = ErrorIgnoringJSONEncoder()
         self._ensure_log_handler()
         
         # basic settings
@@ -250,7 +251,7 @@ class RatchetNotifierMiddleware(object):
             'access_token': self.settings['access_token'],
             'data': data
         }
-        return json.dumps(payload)
+        return self.encoder.encode(payload)
     
     def _extract_person_data(self, request, data):
         """
@@ -302,3 +303,18 @@ class RatchetNotifierMiddleware(object):
         """
         self.agent_log.error(json.dumps(payload))
 
+
+class ErrorIgnoringJSONEncoder(json.JSONEncoder):
+    def __init__(self, **kw):
+        kw.setdefault('skipkeys', True)
+        super(ErrorIgnoringJSONEncoder, self).__init__(**kw)
+
+    def default(self, o):
+        try:
+            return repr(o)
+        except:
+            try:
+                return str(o)
+            except:
+                return "<Unencodable object>"
+    
