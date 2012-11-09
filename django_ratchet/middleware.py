@@ -27,7 +27,7 @@ from django.conf import settings
 
 log = logging.getLogger(__name__)
 
-VERSION = '0.3.2'
+VERSION = '0.3.3'
 
 
 DEFAULTS = {

@@ -12,7 +12,7 @@ except IOError:
 setup(
     name='django-ratchet',
     packages=['django_ratchet'],
-    version='0.3.2',
+    version='0.3.3',
     description='Ratchet.io plugin for django',
     long_description=README,
     author='Brian Rue',
