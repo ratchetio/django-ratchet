@@ -48,6 +48,13 @@ Basic configuration requires two changes in your ``settings.py``.
         'root': '/absolute/path/to/code/root',
     }
 
+  To make the ``RATCHET`` settings available in your templates as ``ratchet_settings``, add the context processor::
+
+    from django.conf import glaobl_settings
+    TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+      'django_ratchet.context_processors.ratchet_settings',
+    )
+
 Here's the full list of configuration variables:
 
 access_token
