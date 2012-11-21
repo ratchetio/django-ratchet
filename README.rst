@@ -50,7 +50,7 @@ Basic configuration requires two changes in your ``settings.py``.
 
   To make the ``RATCHET`` settings available in your templates as ``ratchet_settings``, add the context processor::
 
-    from django.conf import glaobl_settings
+    from django.conf import global_settings
     TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
       'django_ratchet.context_processors.ratchet_settings',
     )

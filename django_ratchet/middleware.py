@@ -27,7 +27,7 @@ from django.conf import settings
 
 log = logging.getLogger(__name__)
 
-VERSION = '0.3.3'
+VERSION = '0.3.5'
 
 
 DEFAULTS = {
@@ -38,7 +38,8 @@ DEFAULTS = {
     'timeout': 1,
     'environment': lambda: 'development' if settings.DEBUG else 'production',
     'agent.log_file': 'log.ratchet',
-    'patch_debugview': True
+    'patch_debugview': True,
+    'scrub_fields': ['passwd', 'password', 'secret']
 }
 
 
@@ -222,8 +223,8 @@ class RatchetNotifierMiddleware(object):
         data['request'] = {
             'url': request.build_absolute_uri(),
             'method': request.method,
-            'GET': dict(request.GET),
-            'POST': dict(request.POST),
+            'GET': self._scrub_request_params(request.GET),
+            'POST': self._scrub_request_params(request.POST),
             'user_ip': _extract_user_ip(request),
         }
         # headers
@@ -252,6 +253,23 @@ class RatchetNotifierMiddleware(object):
             'data': data
         }
         return self.encoder.encode(payload)
+
+    def _scrub_request_params(self, params):
+        """
+        Given request.POST/request.GET, returns a dict with passwords scrubbed out
+        (replaced with astrickses)
+        """
+        scrub_fields = set(self._get_setting('scrub_fields'))
+        params = dict(params)
+        
+        for k, v in params.items():
+            if k.lower() in scrub_fields:
+                if isinstance(v, list):
+                    params[k] = ['*' * len(x) for x in v]
+                else:
+                    params[k] = '*' * len(v)
+        
+        return params
     
     def _extract_person_data(self, request, data):
         """
