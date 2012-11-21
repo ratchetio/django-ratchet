@@ -93,6 +93,10 @@ patch_debugview
     If True, django.views.debug will be patched to show a "View in Ratchet.io" link on technical 500 debug error pages.
 
     **default:** ``True``
+scrub_fields
+    List of field names to scrub out of GET and POST. Values will be replaced with astrickses. If overridiing, make sure to list all fields you want to scrub, not just fields you want to add to the default. Param names are converted to lowercase before comparing against the scrub list.
+
+    **default** ``['passwd', 'password', 'secret']``
 
 
 Contributing
