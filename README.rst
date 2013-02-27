@@ -1,3 +1,6 @@
+This library is deprecated, please use pyrollbar_
+=================================================
+
 django-ratchet - Django notifier for Ratchet.io_
 ================================================
 
@@ -110,5 +113,6 @@ Additional Help
 If you have any questions, feedback, etc., drop us a line at support@ratchet.io
 
 
+.. _pyrollbar: https://github.com/rollbar/pyrollbar
 .. _Ratchet.io: http://ratchet.io/
 .. _ratchet-agent: http://github.com/ratchetio/ratchet-agent
